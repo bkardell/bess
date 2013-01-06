@@ -1,3 +1,5 @@
+var package = require('./package.json');
+
 module.exports = function(grunt){
   	
   grunt.initConfig({
@@ -15,21 +17,23 @@ module.exports = function(grunt){
       compile: {
         options: {
           name: "src/bess.js",
+          optimize: "uglify2",
           baseUrl: "./",
           mainConfigFile: "src/bess.js",
-          out: "dist/bess.js"
+          out: "dist/" + package.name + "-" + package.version  + "-min.js"
         }
+      }, 
+      beautify: {
+        options: {
+          	name: "src/bess.js",
+          	baseUrl: "./",
+          	mainConfigFile: "src/bess.js",
+          	out: "dist/" + package.name + "-" + package.version  + ".js",
+			uglify: {
+				beautify: true
+			}
+		} 
       }
-    },
-    uglify: {
-    	options: {
-    		beautify: true,
-			banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-					'<%= grunt.template.today("yyyy-mm-dd") %> */'
-		},
-		files: {
-			"dist/<%=pkg.name%>-<%=pkg.version%>.js": ["dist/*.js"]
-      	}
     },
     qunit: {
         options: {
@@ -44,25 +48,15 @@ module.exports = function(grunt){
 		}
 	}
   });
-	
-	grunt.event.on('qunit.spawn', function (url) {
-	  grunt.log.ok("Running test: " + url);
-	});
-	
-	grunt.event.on('qunit.begin', function (url) {
-	  grunt.log.ok("begun");
-	});
-		grunt.event.on('qunit.teststart', function (name) {
-	  grunt.log.ok("started " + name);
-	});
+
   // This plugin provides the "connect" task.
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-qunit");
     
   grunt.registerTask("test", ["connect", "qunit"]);
 
-  grunt.registerTask("default", ["jshint", "test"]);
+  grunt.registerTask("default", ["jshint", "test", "requirejs"]);
 
 };
