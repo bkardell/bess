@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>BESS Form Example</title>
+
+    <script src="../../javascripts/framework.js" data-main="../../javascripts/manifest" type="text/javascript" charset="utf-8"></script>
+
+	<link href="../../prettify/prettify.css" rel="stylesheet" />
+	<link href="../../stylesheets/examples.css" rel="stylesheet" />
+	<link href="../../besheets/examples.bess" type="text/bess" />
+
+	<style type="text/css">
+		.selected { color:blue; }
+		#clickr:hover {
+			cursor: pointer;
+		}
+	</style>
+
+</head>
+<body>
+<h2>Form</h2>
+<div class="e">
+	<p>When 'Click Me!' is clicked a message is sent. That message is received and the form field is updated with the message.</p>
+	<pre class="source prettyprint"></pre>
+	<div class="sample">
+		<style type="text/bess">
+			#clickr:clicked{
+				publish: 'form.example.sent' 'And it did';
+			}
+			#one:form.example.sent{
+				form: find('#receiver') message('');
+			}
+		</style>
+		<div class="example">
+			<span class="target" id="clickr">Click Me!</span>
+			<form id="one">
+				<input type="text" name="receiver" value="This should change" id="receiver">
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>

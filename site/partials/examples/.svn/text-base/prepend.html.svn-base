@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>BESS Prepend Example</title>
+
+    <script src="../../javascripts/framework.js" data-main="../../javascripts/manifest" type="text/javascript" charset="utf-8"></script>
+
+	<link href="../../prettify/prettify.css" rel="stylesheet" />
+	<link href="../../stylesheets/examples.css" rel="stylesheet" />
+	<link href="../../besheets/examples.bess" type="text/bess" />
+
+	<style type="text/css" media="screen">
+		#one p span{
+			color: blue;
+		}
+	</style>
+
+</head>
+<body>
+<h2>Prepend HTML</h2>
+<div class="e">
+	<p>Prepends some content to all paragraphs (color added by css):</p>
+	<pre class="source prettyprint"></pre>
+	<div class="sample">
+		<style type="text/bess">
+			#one:html-inserted{
+			html: 'prepend' '<span>Hello </span>' where('#one p');
+		}
+		</style>
+
+		<div id="one" class="example">
+			<p>Kris</p>
+			<p>Philippe</p>
+			<p>Johnathan</p>
+		</div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>BESS Replace With Example</title>
+
+    <script src="../../javascripts/framework.js" data-main="../../javascripts/manifest" type="text/javascript" charset="utf-8"></script>
+
+	<link href="../../prettify/prettify.css" rel="stylesheet" />
+	<link href="../../stylesheets/examples.css" rel="stylesheet" />
+	<link href="../../besheets/examples.bess" type="text/bess" />
+
+	<style type="text/css" media="screen">
+		#clickr:hover {
+			cursor: pointer;
+		}
+	</style>
+
+</head>
+<body>
+<h2>Replace With</h2>
+<div class="e">
+	<p>Replaces matching elements with some new element.</p>
+	<pre class="source prettyprint"></pre>
+	<div class="sample">
+	<style type="text/bess">
+		#clickr:clicked{
+			html: 'replaceWith' '<span>Thanks!</span>';
+		}
+	</style>
+
+	<div id="one" class="example">
+		<span id="clickr" class="target">Confirm?</span>
+	</div>
+</div>
+</div>
+</body>
+</html>

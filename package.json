@@ -1,0 +1,36 @@
+{
+	"name": "bess",
+	"description": "",
+	"version": "1.0.0",
+	"prefersGlobal": "true",
+	"author": "Brian Kardell <bkardell@gmail.com>",
+	"contributors": [
+		{
+			"name": "Brian Kardell",
+			"email": "bkardell@gmail.com"
+		},
+		{
+			"name": "Clint Hill",
+			"email": "clint.hill@gmail.com"
+		}
+	],
+	"homepage": "stay tuned...",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/bkardell/Bess.git"
+	},
+	"main": "",
+	"bin": {
+		"bess": "./bin/bess"
+	},
+	"scripts": {
+		"test": "grunt test"
+	},
+	"devDependencies": {
+		"grunt": ">=0.3.12"
+	},
+	"dependenies": {},
+	"engine": {
+		"node": ">=0.6"
+	}
+}

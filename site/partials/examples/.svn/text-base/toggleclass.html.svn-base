@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>BESS Toggle Class Example</title>
+
+    <script src="../../javascripts/framework.js" data-main="../../javascripts/manifest" type="text/javascript" charset="utf-8"></script>
+
+	<link href="../../prettify/prettify.css" rel="stylesheet" />
+	<link href="../../stylesheets/examples.css" rel="stylesheet" />
+	<link href="../../besheets/examples.bess" type="text/bess" />
+
+	<style type="text/css">
+		#clickr:hover {
+			cursor: pointer;
+		}
+	</style>
+
+</head>
+<body>
+<h2>Toggle Class</h2>
+<div class="e">
+	<p>Toggle the class 'highlight' when a paragraph is clicked.</p>
+	<pre class="source prettyprint"></pre>
+	<div class="sample">
+		<style type="text/bess">
+			#clickr:clicked{
+				class: 'toggle' 'highlight' where('#one p');
+			}
+		</style>
+
+		<div id="one" class="example">
+			<span class="target" id="clickr">Click to toggle</span>
+			<p class="highlight">highlight</p>
+			<p>on these</p>
+			<p>paragraphs</p>
+		</div>
+	</div>
+</div>
+</body>
+</html>

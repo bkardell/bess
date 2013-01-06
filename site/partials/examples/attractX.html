@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>BESS Attract X Example</title>
+
+    <script src="../../javascripts/framework.js" data-main="../../javascripts/manifest" type="text/javascript" charset="utf-8"></script>
+
+	<link href="../../prettify/prettify.css" rel="stylesheet" />
+	<link href="../../stylesheets/examples.css" rel="stylesheet" />
+	<link href="../../besheets/examples.bess" type="text/bess" />
+	
+	<style type="text/css" media="screen">
+		#clickr:hover {
+			cursor: pointer;
+		}
+
+		#two div{
+			position: relative;
+			background-color: #f0f0f0;
+			border: 1px solid black;
+		}
+
+		#two{
+			padding: 0px; /* Correct 1em that is global for examples, but screws up this calc... */
+		}
+
+	</style>
+
+</head>
+<body>
+<h2>attractX</h2>
+
+<div class="e">
+	<p>Attracts one element (the left property) along the X axis in relation to another element .</p>
+	<pre class="source prettyprint"></pre>
+	<div class="sample">
+		<style type="text/bess">
+			#two a:nth(0):clicked{
+				effect-target:     where('#b');
+				effect-name:       'attractX';
+				effect-relative:   to('#a');
+			}
+
+			#two a:nth(1):clicked{
+				effect-target:     where('#b');
+				effect-name:       'attractX';
+				effect-relative:   to('#c');
+			}
+		</style>
+		<div class="example" id="two" style="position:relative;">
+			<div id="a" style="left: 300px;width: 100px;">Element A</div>
+
+			<div id="b" style="width: 300px;">Element B <br /> <a href=="#">Attract to A</a> <br /> <a href=="#">Attract to C</a></div>
+
+			<div id="c" style="left: 600px;width: 100px;">Element C</div>
+		</div>
+	</div>
+</div>
+
+
+
+</body>
+</html>

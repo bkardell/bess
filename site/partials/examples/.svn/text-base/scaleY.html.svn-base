@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>BESS Scale Y Example</title>
+
+    <script src="../../javascripts/framework.js" data-main="../../javascripts/manifest" type="text/javascript" charset="utf-8"></script>
+
+	<link href="../../prettify/prettify.css" rel="stylesheet" />
+	<link href="../../stylesheets/examples.css" rel="stylesheet" />
+	<link href="../../besheets/examples.bess" type="text/bess" />
+	
+	<style type="text/css" media="screen">
+		#clickr:hover {
+			cursor: pointer;
+		}
+
+		#one{
+			height: 10px;
+		    overflow: hidden;
+		}
+	</style>
+
+</head>
+<body>
+<h2>scaleY</h2>
+<div class="e">
+	<p>Scale an element the Y direction (height) in relation to another element (to match).</p>
+	<pre class="source prettyprint"></pre>
+	<div class="sample">
+		<style type="text/bess">
+			#clickr:clicked{
+				effect-target:  	where('#one');
+				effect-name:    	'scaleY';
+				effect-relative:	to('#inner');
+			}
+		</style>
+		<span id="clickr" class="target">Click me!</span>
+		<div id="one" class="example">
+			<div id="inner" style="height: 100px;background-color: blue;color: white">Hello <span>World</span></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
