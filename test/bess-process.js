@@ -80,7 +80,9 @@ asyncTest("process() resolves properties and calls the named module correctly", 
 			var origDebug = logger.debug;
 			logger.debug = function(m){
 				logged.push(JSON.stringify(m));
-				origDebug(m);
+				// Why this is bugging phantom out - I have no idea
+				// but we will comment it until it doesn't...
+				// origDebug(m);
 			}
 			//add a dummy module... This will capture calls to make sure that
 			//it was called through the process and applied correctly
