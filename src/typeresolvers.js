@@ -264,7 +264,7 @@ define([
 				w.setVal(prop,template);
 			}else{
 				$.get(arg[0], function(template) {
-				  	w.setVal(prop,template);
+					w.setVal(prop,template);
 				}, 'html').error(function(){
 					w.setError(prop,"unable to load " + arg[0]);
 				});
