@@ -15,7 +15,11 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.js"></script>
 	<script type="text/javascript">
 		requirejs.config({baseUrl: "../"});
+		require(['src/bess'],function(){
+				console.log(".............." + arguments[0]);
+		});
 	</script>
+	
 	<script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.10.0.js"></script>
 
 	
@@ -33,7 +37,6 @@
 	<script type="text/javascript" src="modules/effectModule.js"></script>
 	<script type="text/javascript" src="modules/formModule.js"></script>
 	<script type="text/javascript" src="modules/htmlModule.js"></script>
-	<script type="text/javascript" src="modules/publishModule.js"></script>
 
 
 	<script type="text/javascript" src="parser.js"></script>
