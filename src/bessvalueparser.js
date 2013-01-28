@@ -72,24 +72,34 @@ define(
                     rules = parseRules(StringScanner.create(str), el);
                     // If provided, we mark the source element as parsed...
                     if(el){
-                        (el).attr('bess_parsed','true');
+                        $(el).attr('bess_parsed','true');
                     }
 					dfd.resolve(rules);
 				}); 
 				return dfd.promise();
             };
+            
+            var registr = function(x){
+                Logger.debug('resolved ' + x.type + '"' + x.name + '" at ' + new Date().getTime());
+
+				if(x.type==='module'){
+					Modules.cache[x.name] = x;
+				}else if(x.type==='type'){
+					typeResolvers[x.typeName] = x;
+				}
+            };
 
 			var makeImportPromise = function(type,url) {
-				var dfd = $.Deferred();
-				//TODO: Add extension here but also consider min suffix as well
+				var dfd = $.Deferred(), n;
 				require([url], function(x){
 					if(x){
-						if(type==='module'){
-							Logger.debug('resolved module ' + x.name + " at " + new Date().getTime());
-							Modules.cache[x.name] = x;
-						}else if(type==='type'){
-							//can't .name a function :(
-							typeResolvers[x.typeName] = x;
+						if(type==='package'){
+							for(n=0;n<x.length;n++){
+								registr(x[n]);
+							}
+						}else{
+							x.type = type;
+							registr(x);
 						}
 					}else{
 						Logger.error('Unable to find ' + type + " at " + url);
