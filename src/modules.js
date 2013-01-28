@@ -1,9 +1,10 @@
 define([
 		'src/extendedjquery',
+		'lib/pagebus',
 		'lib/mustache',
 		'src/logging'
 	], 
-	function($, Mustache, Logger){
+	function($, pb, Mustache, Logger){
 
 	// Convenience creator for string resolvers for use in module defaults
 	// sending no string will cause it to return the null string ('').
@@ -53,8 +54,9 @@ define([
 					open=dat.target.length, 
 					names = dat.name.split(','),
 					proc = function(o,e,d,n){
-						return function(){
-							if(o && --o === 0){
+						return function(o,e,d,n){
+							if(--o === 0){
+								e.dequeue('pseudo');
 								d.target.trigger('post-' + n);
 							}
 						};
@@ -65,6 +67,39 @@ define([
 					n = $.trim(names[i]);
 					dat.target[n](dat.duration,dat.easing,proc(open,el,dat,n), dat.relative);
 				}
+			}
+		},
+
+		// * The __publish module__ allows the publishing of messages to topics,
+		// allows a delay before the message is sent and the ability to repeatedly
+		// publish this message (delay will count between each).  Publishing is an
+		// asynchronous process, so once begun it does not block completion of the rule state.
+		publish: {
+			properties: ['topic','data','timer','repeat'],
+			defaults:{data:_obj(),timer: _str(0),repeat: _str(1)},
+			apply: function(dat,el){
+				var ct,infinite,id,done;
+
+				// * * the number of times to repeat...
+				ct=dat.repeat||1;
+
+				// * * a flag stating whether or not the repeat is 'infinity'...
+				infinite = dat.repeat == 'infinity';
+
+				// * * the interval id, used to clear it if/when complete...
+				id = setInterval(function(){
+					if(!infinite && ct<=0){
+						done();
+					}else{
+						ct--;
+						pb.publish(($.isArray(dat.topic)) ? dat.topic[0] : dat.topic,dat.data||{});
+					}
+				},dat.timer);
+
+				// * * closure which maintains the id and can clear the interval
+				done = function(){
+					clearInterval(id);
+				};
 			}
 		},
 
@@ -118,7 +153,7 @@ define([
 			properties:['op','source','target'],
 			defaults:{target:_find(),source:{resolver: 'html', arg: _find()},op:{resolver:'string',arg:'replaceContent'}},
 			apply: function(dat,el){
-				var additive, arg, markup, str;
+				var additive, arg, markup;
 				additive = ['append','replaceContent','prepend','replaceWith', 'wrapInner', 'wrap'];
 				arg = dat.id || dat.source;
 				markup = (-1<$.inArray(dat.op,additive)) ?  arg : null;
@@ -140,9 +175,7 @@ define([
 	// Does nothing and will call callback if provided
 	var modifier = function(op, markup, target, callback) {
 		Logger.debug("Default Modifier called within Modules.");
-		if(callback){
-			callback();
-		}
+		if(callback) callback();
 	};
 
 	// module function to get a module from the cache

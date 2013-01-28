@@ -1,26 +1,10 @@
 define(
 	[
 		'src/extendedjquery',
+		'lib/pagebus',
 		'src/logging'
 	],
-	function($, Logger){
-	
-	var scanChildren = function (target) {
-		// * * Trigger inserted on any children that meet the domInsertRules criteria
-		var i, event, items;
-		items = target.find('*').filter(Bess.engine.domInsertRules.join(','));
-		for (i = 0; i < items.length; i++) {
-			event = new $.Event('html-inserted');
-			event.preventDefault();
-			Logger.debug('Triggering html-inserted.');
-			$(items[i]).trigger(event);
-		}
-
-		// * * Trigger modified on the target itself
-		Logger.debug('Triggering html-modified.');
-		target.trigger('html-modified');
-	};
-	
+	function($, pagebus, Logger){
 	// The key piece in charge of DOM subtree modification - a single
     // point of entry - it handles the act itself, as well triggering of 
     // related modification events.  The behavior engine provides it to 
@@ -87,11 +71,10 @@ define(
         }
 
 		// Fire a message to the Behavior Engine to scan with new target
-		Bess.engine.init(target,true);
-		
+		pagebus.publish('document.scan', {context: target, isLocal: true});
 		// Fire a message to the Behavior Engine to trigger inserted on 
-		// target's children
-		scanChildren(target);
+		// target's childrend
+		pagebus.publish('document.inserted.children', { context: target });
     };
 
 	return mod;

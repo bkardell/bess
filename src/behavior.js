@@ -1,13 +1,14 @@
 define(
 	[
 		'src/extendedjquery',
+		'lib/pagebus',
 		'src/modules',
 		'src/dommod',
 		'src/typeresolvers',
 		'src/typeresolverengine',
 		'src/bessvalueparser',
 		'src/logging'
-	], function ($, Modules, DomMod, TypeResolvers, resolverEngine, parser, Logger) {
+	], function ($, pb, Modules, DomMod, TypeResolvers, resolverEngine, parser, Logger) {
 
 	// Set the DOM Modifier for the Modules
 	Modules.setModifier(DomMod);
@@ -59,6 +60,28 @@ define(
 	if (!window.localStorage) {
 		window.localStorage = {};
 	}
+
+	// Global subscription to scan requests from outside the engine
+	pb.subscribe('document.scan', null, function (topic, msg) {
+		scan(msg.context, msg.isLocal);
+	});
+
+	// Global subscription to children being inserted
+	pb.subscribe('document.inserted.children', null, function (topic, msg) {
+		// * * Trigger inserted on any children that meet the domInsertRules criteria
+		var i, event, items, target = msg.context;
+		items = target.find('*').filter(domInsertRules.join(','));
+		for (i = 0; i < items.length; i++) {
+			event = new $.Event('html-inserted');
+			event.preventDefault();
+			Logger.debug('Triggering html-inserted.');
+			$(items[i]).trigger(event);
+		}
+
+		// * * Trigger modified on the target itself
+		Logger.debug('Triggering html-modified.');
+		target.trigger('html-modified');
+	});
 
 	// Used by findEvt to map Bess' states to underlying DOM events
 	var map = {
@@ -157,6 +180,28 @@ define(
 	var attachRule = function (rule /*, ctx */) {
 		var pseudo = rule.selector.pseudo;
 		var selector = rule.selector;
+
+		// This checks for topics vs. DOM-like states
+		if (pseudo.split(/\./).length > 1) {
+			if (!topicMap[pseudo]) {
+				topicMap[pseudo] = [ selector.select ];
+				pb.subscribe(pseudo, null, function (topic, message) {
+					var rst = $(topicMap[pseudo].join(',')).toArray(), real = [], i = 0;
+					Logger.debug('triggering ' + pseudo + ' from subscription...');
+					for (; i < rst.length; i++) {
+						if ($(rst[i]).has(rst.slice(i + 1)).length === 0) {
+							real.push(rst[i]);
+						}
+					}
+					$(real).trigger(pseudo, message);
+				});
+			}
+			else {
+				if (!topicMap[pseudo][selector.select])
+					topicMap[pseudo].push(selector.select);
+			}
+		}
+
 		var state = findEvt(pseudo);
 
 		$(rule.selector.select).live(state, rule, bessHandler);
@@ -179,9 +224,6 @@ define(
 					if (e.type === 'html-modified' && (e.currentTarget !== e.target)) {
 						Logger.debug('bailing... html-modified current target:' + e.currentTarget.tagName + ' - target:' + e.target.tagName);
 						return;
-					}
-					else if(e.type.indexOf('post-') !== -1){
-						e.currentTarget = e.target; /* TODO: added bk during open-bess ... this plan needs work */
 					}
 					else if (e.type === 'html-inserted' && (e.currentTarget !== e.target)) {
 						Logger.debug('switching... html-inserted current target:' + e.currentTarget + ' - target:' + e.target);
@@ -273,7 +315,6 @@ define(
 	};
 
 	return {
-		domInsertRules: domInsertRules,
 		'::' : type_resolvers,
 		':' : Modules.cache,
 		process : attachRules,

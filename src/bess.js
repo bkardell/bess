@@ -31,12 +31,10 @@ define(
 			}
 		});
 
-		Bess = {
+		return {
 			parser: parser,
 			engine: behavior,
 			resolvers: modules.resolvers
 		};
-		
-		return Bess;
 	}
 );
