@@ -8,6 +8,7 @@ define([
 				// Create a closure for non-blocking calls to resolve - this will
 				// prevent any one
 				resolve = function(x,j,watch,prop,msg){
+					console.log('hmm: ', j);
 					setTimeout(function(){
 							resolverEngine.property(x,j,watch,prop,msg);
 						},
