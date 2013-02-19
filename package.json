@@ -1,7 +1,7 @@
 {
   "name": "bess",
   "description": "Behavior Stylesheets",
-  "version": "2.0.0",
+  "version": "2.0.alpha1",
   "prefersGlobal": "true",
   "author": "Brian Kardell <bkardell@gmail.com>",
   "contributors": [
