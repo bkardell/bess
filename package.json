@@ -1,7 +1,7 @@
 {
   "name": "bess",
-  "description": "",
-  "version": "1.0.0",
+  "description": "Behavior Stylesheets",
+  "version": "2.0.0",
   "prefersGlobal": "true",
   "author": "Brian Kardell <bkardell@gmail.com>",
   "contributors": [
@@ -14,29 +14,17 @@
       "email": "clint.hill@gmail.com"
     }
   ],
-  "homepage": "stay tuned...",
   "repository": {
     "type": "git",
     "url": "git://github.com/bkardell/Bess.git"
   },
-  "main": "",
-  "bin": {
-    "bess": "./bin/bess"
-  },
-  "scripts": {
-    "test": "grunt test"
-  },
   "devDependencies": {
-    "grunt": "~0.4.0",
+    "grunt": "~0.4.0rc6",
     "grunt-contrib-jshint": "~0.1.0",
-    "grunt-contrib-nodeunit": "~0.1.0",
-    "grunt-contrib-qunit": "~0.1.0",
-    "grunt-init": "~0.1.0",
-    "grunt-contrib-uglify": "~0.1.0",
-    "grunt-contrib-requirejs": "~0.3.4"
-  },
-  "dependenies": {
-    "grunt-lib-phantomjs": "~0.1.6"
+    "grunt-contrib-qunit": "~0.1.1",
+    "grunt-contrib-uglify": "~0.1.1",
+    "grunt-contrib-connect": "~0.1.0",
+    "grunt-contrib-concat": "~0.1.2"
   },
   "engine": {
     "node": ">=0.8"

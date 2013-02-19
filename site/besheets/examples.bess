@@ -1,5 +1,0 @@
-@import module('/prettify.js');
-
-.source:html-inserted {
-	prettify: from(':self + .sample');
-}

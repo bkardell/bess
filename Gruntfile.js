@@ -1,62 +1,76 @@
-var package = require('./package.json');
-
 module.exports = function(grunt){
-  	
+  'use strict';
   grunt.initConfig({
-    pkg: '<json:package.json>',
-    meta: {
-      banner: '/* <%= pkg.name %> - v<%= pkg.version %> - <%= pkg.homepage %> <%= grunt.template.today("mm/dd/yyyy hh:mm TT") %> */'
-    },
+
+    pkg: grunt.file.readJSON('package.json'),
+
     jshint: {
+      all: ['src/**/*.js'],
       options: {
-        browser: true
-      }, 
-      all: ['src/**/*.js']
-    },
-    requirejs: {
-      compile: {
-        options: {
-          name: "src/bess.js",
-          optimize: "uglify2",
-          baseUrl: "./",
-          mainConfigFile: "src/bess.js",
-          out: "dist/" + package.name + "-" + package.version  + "-min.js"
-        }
-      }, 
-      beautify: {
-        options: {
-          	name: "src/bess.js",
-          	baseUrl: "./",
-          	mainConfigFile: "src/bess.js",
-          	out: "dist/" + package.name + "-" + package.version  + ".js",
-			uglify: {
-				beautify: true
-			}
-		} 
+        evil: true
       }
     },
-    qunit: {
-        options: {
-    		timeout: 20000
-    	},
-        all: ["http://localhost:8000/test/all.html"]
+
+    concat: {
+      dist: {
+        src: [
+          'src/bess.js',
+          'src/parser.js',
+          'src/scanner.js',
+          'src/engine.js',
+          'src/resolver.js',
+          'src/modules.js',
+          'src/utility.js'
+        ],
+        dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.js'
+      },
+      core: {
+        src: [
+          'src/modules/class.js',
+          'src/modules/effect.js'
+        ],
+        dest: 'dist/<%= pkg.name %>-core-modules-<%= pkg.version %>.js'
+      }
     },
+
+    uglify: {
+      dist: {
+        src: 'dist/<%= pkg.name %>-<%= pkg.version %>.js',
+        dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.min.js'
+      },
+      core: {
+        src: 'dist/<%= pkg.name %>-core-modules-<%= pkg.version %>.js',
+        dest: 'dist/<%= pkg.name %>-core-modules-<%= pkg.version %>.min.js'
+      }
+    },
+
+    qunit: {
+      options: {
+        timeout: 1000
+      },
+      all: {
+        options: {
+          urls: ['http://localhost:8000/test/index.html']
+        }
+      }
+    },
+
     connect: {
-		server: {
-		  port: 8000,
-		  base: "."
-		}
-	}
+      server: {
+        port: 8000,
+        base: '.'
+      }
+    }
+
   });
 
-  // This plugin provides the "connect" task.
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-contrib-qunit");
-    
-  grunt.registerTask("test", ["connect", "qunit"]);
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask("default", ["jshint", "test", "requirejs"]);
+  grunt.registerTask('test', ['connect', 'qunit']);
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
 
 };
